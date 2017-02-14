@@ -29,4 +29,13 @@
             backward-compatibility can go here.
         -->
     </style>
+
+    <style name="AnimActivityTheme">
+        <item name="android:windowAnimationStyle">@style/ControllerActivityAnimation</item>
+    </style>
+
+    <style name="ControllerActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/controller_activity_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/controller_activity_out</item>
+    </style>
 </resources>
