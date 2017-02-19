@@ -68,24 +68,28 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".ui.RockerControllerActivity"
             android:screenOrientation="landscape">
             <intent-filter>
-                <action android:name="com.shouchuang.car.ui.rocker"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.shouchuang.car.ui.rocker" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.ControllerSelectActivity"
-            android:screenOrientation="landscape"
-            android:label="@string/title_activity_controller_select">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.SteerControllerActivity"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="com.shouchuang.car.ui.wheer" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

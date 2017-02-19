@@ -17,6 +17,7 @@ import com.shouchuang.car.R;
 public class ControllerSelectActivity extends Activity {
 
     public static final String ACTION_ROCKER_CONTROLLER = "com.shouchuang.car.ui.rocker";
+    public static final String ACTION_WHEER_CONTROLLER = "com.shouchuang.car.ui.wheer";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +34,13 @@ public class ControllerSelectActivity extends Activity {
     class ControllerSelectAdapter extends PagerAdapter {
 
         private final int[] CONTROLLER_PIC_RES = {
-                R.drawable.ic_launcher,
-                R.drawable.ic_launcher
+                R.drawable.thumb_rocker_controller,
+                R.drawable.thumb_wheer_controller
         };
 
         private final String[] ACTION = {
                 ACTION_ROCKER_CONTROLLER,
-                ACTION_ROCKER_CONTROLLER
+                ACTION_WHEER_CONTROLLER
         };
 
         private Context mContext;
@@ -62,7 +63,7 @@ public class ControllerSelectActivity extends Activity {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            View view = mLayoutInflater.inflate(R.layout.item, container, false);
+            View view = mLayoutInflater.inflate(R.layout.item_controller_card, container, false);
             ImageView pic = (ImageView) view.findViewById(R.id.img_item);
             pic.setImageResource(CONTROLLER_PIC_RES[position]);
             view.setOnClickListener(new View.OnClickListener() {
