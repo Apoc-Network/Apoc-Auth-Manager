@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="easylink_ftc_out">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/easylink_ftc_out.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
