@@ -1,4 +1,4 @@
-package com.doit.carset;
+package com.shouchuang.car.ui;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.shouchuang.car.R;
 
 public class BenDiActivity extends Activity implements OnClickListener {
 

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.doit.carset"
+    package="com.shouchuang.car"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -74,7 +74,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".BenDiActivity"
+            android:name=".ui.BenDiActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait">
             <intent-filter>
