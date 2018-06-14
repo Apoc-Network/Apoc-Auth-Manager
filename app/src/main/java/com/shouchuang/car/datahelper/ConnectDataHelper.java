@@ -3,6 +3,7 @@ package com.shouchuang.car.datahelper;
 import android.os.Message;
 
 import com.shouchuang.car.R;
+import com.shouchuang.car.datahelper.network.SocketHelper;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -13,15 +14,17 @@ import java.net.UnknownHostException;
  * Created by skylan on 16/12/25.
  */
 
-public class ConnectDataHelper {
+public class ConnectDataHelper implements SocketHelper.ScocketResponseListener{
+
+    public static final String COMMAND_STR = "cmd=ping";
+
+    private SocketHelper socketHelper = new SocketHelper();
 
     public void connectcar() {
 
-        byte[] data = "cmd=ping".getBytes();
         try {
-            address = InetAddress.getByName("255.255.255.255");
-            dataPacket = new DatagramPacket(data, data.length, address,
-                    8089);
+            socketHelper.setSendData(COMMAND_STR, "255.255.255.255", 8089);
+            socketHelper.setmTimeOut(10);
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -51,18 +54,7 @@ public class ConnectDataHelper {
 
                     try {
                         // ms.setTimeToLive(1);
-                        ms.setSoTimeout(1);
-                        ms.send(dataPacket);
-                        System.out.println(i);
-                        // 读取Socket中的数据，读到的数据放在inPacket所封装的字节数组中
-                        ms.receive(inPacket);
-                        System.out.println(new String(inBuff, 0, inPacket
-                                .getLength()));
-                        if (inPacket.getLength() > 0) {
-                            str_udp1 = new String(inBuff, 0,
-                                    inPacket.getLength());
-                            break;
-                        }
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -87,4 +79,13 @@ public class ConnectDataHelper {
 
     }
 
+    @Override
+    public void receiveSucceed() {
+
+    }
+
+    @Override
+    public void receiveError() {
+
+    }
 }
