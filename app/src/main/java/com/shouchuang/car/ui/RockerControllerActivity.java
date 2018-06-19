@@ -2,28 +2,22 @@ package com.shouchuang.car.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.View;
 import android.widget.SeekBar;
 
 import com.shouchuang.car.R;
 import com.shouchuang.car.datahelper.Direction;
 import com.shouchuang.car.datahelper.MoveDataHelper;
+import com.shouchuang.car.ui.widget.DashboardView;
 import com.shouchuang.car.ui.widget.VerticalSeekBar;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RockerControllerActivity extends Activity {
 
     private VerticalSeekBar mLeftRocker;
     private VerticalSeekBar mRightRocker;
+    private DashboardView mDashboardView;
 
     private MoveDataHelper dataHelper;
-
-    Timer mTimer;
+    private boolean isAnimFinished = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +40,12 @@ public class RockerControllerActivity extends Activity {
                 } else {
                     dataHelper.move(Direction.LEFT_STOP);
                 }
+                mDashboardView.setVelocity(Math.abs(i - 50)*2);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -70,7 +66,8 @@ public class RockerControllerActivity extends Activity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -78,5 +75,13 @@ public class RockerControllerActivity extends Activity {
                 dataHelper.cancelRightSend();
             }
         });
+        mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataHelper.cancelLeftSend();
+        dataHelper.cancelRightSend();
     }
 }

@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">DoitCar</string>
+    <string name="app_name">首创智能小车</string>
 
     <string name="str_bendi">Local Mode</string>
     <string name="retry">Reconnect</string>

@@ -58,6 +58,7 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
             try {
                 mLeftWheelSocketHelper.setSendData(COMMAND_SUB_STR + _direction.getValue(),
                         CAR_IP, CONNECT_PORT_LEFT);
+                cancelLeftSend();
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -67,13 +68,14 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
                 public void run() {
                     mLeftWheelSocketHelper.send();
                 }
-            }, 0, 1000);
+            }, 0, 500);
         } else if (_direction == Direction.RIGHT_FORWARD
                 || _direction == Direction.RIGHT_BACKEARD
                 || _direction == Direction.RIGHT_STOP) {
             try {
                 mRightWheelSocketHelper.setSendData(COMMAND_SUB_STR + _direction.getValue(),
                         CAR_IP, CONNECT_PORT_RIGHT);
+                cancelRightSend();
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -83,7 +85,7 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
                 public void run() {
                     mRightWheelSocketHelper.send();
                 }
-            }, 0, 1000);
+            }, 0, 500);
         }
     }
 

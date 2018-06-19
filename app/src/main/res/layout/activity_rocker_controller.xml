@@ -4,13 +4,14 @@
     android:id="@+id/activity_rocker_controller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:background="@drawable/background"
     tools:context="com.shouchuang.car.ui.RockerControllerActivity">
 
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_margin="30dp"
         android:layout_weight="1">
 
         <com.shouchuang.car.ui.widget.VerticalSeekBar
@@ -20,14 +21,32 @@
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="100"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
             android:progress="50"
+            android:progressDrawable="@drawable/rocker_seekbar_style"
             android:thumb="@drawable/rocker_btn"
             android:thumbOffset="0dp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_weight="2">
+
+        <com.shouchuang.car.ui.widget.DashboardView
+            android:id="@+id/dashboard_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_margin="30dp"
         android:layout_weight="1">
 
         <com.shouchuang.car.ui.widget.VerticalSeekBar
@@ -37,7 +56,10 @@
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="100"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
             android:progress="50"
+            android:progressDrawable="@drawable/rocker_seekbar_style"
             android:thumb="@drawable/rocker_btn"
             android:thumbOffset="0dp" />
 
