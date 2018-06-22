@@ -51,7 +51,6 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
 
 
     public void move(Direction _direction) {
-
         if (_direction == Direction.LETF_FORWARD
                 || _direction == Direction.LEFT_BACKEARD
                 || _direction == Direction.LEFT_STOP) {
@@ -68,7 +67,7 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
                 public void run() {
                     mLeftWheelSocketHelper.send();
                 }
-            }, 0, 500);
+            }, 500, 500);
         } else if (_direction == Direction.RIGHT_FORWARD
                 || _direction == Direction.RIGHT_BACKEARD
                 || _direction == Direction.RIGHT_STOP) {
@@ -85,13 +84,14 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
                 public void run() {
                     mRightWheelSocketHelper.send();
                 }
-            }, 0, 500);
+            }, 500, 500);
         }
     }
 
     public void cancelLeftSend() {
-        if (mTimer_left != null)
+        if (mTimer_left != null) {
             mTimer_left.cancel();
+        }
     }
 
     public void cancelRightSend() {

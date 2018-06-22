@@ -32,6 +32,10 @@ public class VerticalSeekBar extends SeekBar {
         super.onSizeChanged(h, w, oldh, oldw);
     }
 
+    public void notifyProgressBar() {
+        onSizeChanged(getWidth(), getHeight(), 0, 0);
+    }
+
     @Override
     public void setThumb(Drawable thumb) {
         super.setThumb(thumb);
@@ -67,8 +71,6 @@ public class VerticalSeekBar extends SeekBar {
                 break;
             case MotionEvent.ACTION_UP:
                 super.onTouchEvent(event);
-                setProgress(50);
-                onSizeChanged(getWidth(), getHeight(), 0, 0);
                 break;
             case MotionEvent.ACTION_CANCEL:
                 break;

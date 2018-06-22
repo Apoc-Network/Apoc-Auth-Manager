@@ -2,6 +2,7 @@ package com.shouchuang.car.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SeekBar;
 
 import com.shouchuang.car.R;
@@ -17,7 +18,6 @@ public class RockerControllerActivity extends Activity {
     private DashboardView mDashboardView;
 
     private MoveDataHelper dataHelper;
-    private boolean isAnimFinished = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,6 @@ public class RockerControllerActivity extends Activity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                dataHelper.move(Direction.LEFT_STOP);
                 dataHelper.cancelLeftSend();
             }
         });
@@ -71,8 +70,9 @@ public class RockerControllerActivity extends Activity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                dataHelper.move(Direction.RIGHT_STOP);
                 dataHelper.cancelRightSend();
+                seekBar.setProgress(50);
+                ((VerticalSeekBar)seekBar).notifyProgressBar();
             }
         });
         mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
