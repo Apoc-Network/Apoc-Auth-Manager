@@ -9,10 +9,6 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +23,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shouchuang.car.R;
+import com.shouchuang.car.utils.WifiManager;
 
 public class BenDiActivity extends Activity implements OnClickListener {
 
@@ -87,7 +84,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
 
         initView();
 
-        wifi_connected = isWifiConnected();
+        wifi_connected = WifiManager.isWifiConnected(this);
         // System.out.println(wifi_connected);
         if (!wifi_connected) {
             text1.setText(R.string.str_con);
@@ -99,7 +96,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
             connectcar();
         }
 
-        wifi_ssid = getConnectWifiSsid();
+        wifi_ssid = WifiManager.getConnectWifiSsid(this);
         System.out.println(wifi_ssid);
     }
 
@@ -240,23 +237,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
     }
 
 
-    public boolean isWifiConnected() {
 
-        ConnectivityManager mConnectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo mWiFiNetworkInfo = mConnectivityManager
-                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (mWiFiNetworkInfo != null) {
-            return mWiFiNetworkInfo.isAvailable();
-        }
-
-        return false;
-    }
-
-    private String getConnectWifiSsid() {
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        return wifiInfo.getSSID();
-    }
 
     Handler handler = new Handler() {
 
