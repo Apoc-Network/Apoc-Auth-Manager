@@ -202,23 +202,22 @@ public class ButtonControllerActivity extends Activity implements OnClickListene
                 case 11:
                     switch (StrSend) {
                         case 0:
-                            mMoveDataHelper.move(Direction.LETF_FORWARD);
+                            mMoveDataHelper.move(Direction.FORWARD, Direction.BACKWARD);
                             break;
                         case 1:
-                            mMoveDataHelper.move(Direction.LEFT_BACKEARD);
+                            mMoveDataHelper.move(Direction.FORWARD, Direction.BACKWARD);
                             break;
                         case 2:
-                            mMoveDataHelper.move(Direction.RIGHT_FORWARD);
+                            mMoveDataHelper.move(Direction.FORWARD, Direction.BACKWARD);
                             break;
                         case 3:
-                            mMoveDataHelper.move(Direction.RIGHT_BACKEARD);
+                            mMoveDataHelper.move(Direction.FORWARD, Direction.BACKWARD);
                             break;
                     }
                     break;
                 case 12:
                     str_instr = "停止";
-                    mMoveDataHelper.move(Direction.LEFT_STOP);
-                    mMoveDataHelper.move(Direction.RIGHT_STOP);
+                    mMoveDataHelper.stop();
                     break;
                 default:
                     break;

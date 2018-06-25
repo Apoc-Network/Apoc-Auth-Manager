@@ -5,12 +5,9 @@ package com.shouchuang.car.datahelper;
  */
 
 public enum Direction {
-    LEFT_STOP(0),
-    LETF_FORWARD(1),
-    LEFT_BACKEARD(2),
-    RIGHT_STOP(3),
-    RIGHT_FORWARD(4),
-    RIGHT_BACKEARD(5);
+    STOP(0x00),
+    FORWARD(0x01),
+    BACKWARD(0x10);
 
     private int mValue;
 

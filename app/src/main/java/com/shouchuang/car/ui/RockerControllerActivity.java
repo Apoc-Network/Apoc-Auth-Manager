@@ -2,7 +2,6 @@ package com.shouchuang.car.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.SeekBar;
 
 import com.shouchuang.car.R;
@@ -13,11 +12,18 @@ import com.shouchuang.car.ui.widget.VerticalSeekBar;
 
 public class RockerControllerActivity extends Activity {
 
+
     private VerticalSeekBar mLeftRocker;
     private VerticalSeekBar mRightRocker;
     private DashboardView mDashboardView;
 
     private MoveDataHelper dataHelper;
+
+    private int mLeftspeed = 0;
+    private int mRightspeed = 0;
+    private Direction mLeftWheel = Direction.STOP;
+    private Direction mRightWheel = Direction.STOP;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +39,16 @@ public class RockerControllerActivity extends Activity {
         mLeftRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if (i < 45) {
-                    dataHelper.move(Direction.LEFT_BACKEARD);
-                } else if (i > 55) {
-                    dataHelper.move(Direction.LETF_FORWARD);
+                mLeftspeed = i - 50;
+                if (mLeftspeed < -5) {
+                    mLeftWheel = Direction.BACKWARD;
+                } else if (mLeftspeed > 5) {
+                    mLeftWheel = Direction.FORWARD;
                 } else {
-                    dataHelper.move(Direction.LEFT_STOP);
+                    mLeftWheel = Direction.STOP;
                 }
-                mDashboardView.setVelocity(Math.abs(i - 50)*2);
+                drawDashboard();
+                dataHelper.move(mLeftWheel, mRightWheel);
             }
 
             @Override
@@ -49,19 +57,24 @@ public class RockerControllerActivity extends Activity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                dataHelper.cancelLeftSend();
+                seekBar.setProgress(50);
+                ((VerticalSeekBar) seekBar).notifyProgressBar();
+                dataHelper.stop();
             }
         });
         mRightRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if (i < 45) {
-                    dataHelper.move(Direction.RIGHT_BACKEARD);
-                } else if (i > 55) {
-                    dataHelper.move(Direction.RIGHT_FORWARD);
+                mRightspeed = i - 50;
+                if (mRightspeed < -5) {
+                    mRightWheel = Direction.BACKWARD;
+                } else if (mRightspeed > 5) {
+                    mRightWheel = Direction.FORWARD;
                 } else {
-                    dataHelper.move(Direction.RIGHT_STOP);
+                    mRightWheel = Direction.STOP;
                 }
+                drawDashboard();
+                dataHelper.move(mLeftWheel, mRightWheel);
             }
 
             @Override
@@ -70,18 +83,21 @@ public class RockerControllerActivity extends Activity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                dataHelper.cancelRightSend();
                 seekBar.setProgress(50);
-                ((VerticalSeekBar)seekBar).notifyProgressBar();
+                ((VerticalSeekBar) seekBar).notifyProgressBar();
+                dataHelper.stop();
             }
         });
         mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
     }
 
+    private void drawDashboard() {
+        mDashboardView.setVelocity(Math.abs(mLeftspeed) + Math.abs(mRightspeed));
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        dataHelper.cancelLeftSend();
-        dataHelper.cancelRightSend();
+        dataHelper.stop();
     }
 }

@@ -64,9 +64,7 @@ public class VerticalSeekBar extends SeekBar {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                int i = 0;
-                i = getMax() - (int) (getMax() * event.getY() / getHeight());
-                setProgress(i);
+                setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
                 break;
             case MotionEvent.ACTION_UP:
