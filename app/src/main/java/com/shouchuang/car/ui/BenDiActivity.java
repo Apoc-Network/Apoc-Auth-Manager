@@ -20,19 +20,59 @@ import android.widget.TextView;
 
 import com.shouchuang.car.R;
 import com.shouchuang.car.datahelper.ConnectDataHelper;
+import com.shouchuang.car.datahelper.Direction;
+import com.shouchuang.car.datahelper.MoveDataHelper;
 import com.shouchuang.car.utils.WifiManager;
 
 public class BenDiActivity extends Activity implements OnClickListener {
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            //按下操作
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                switch (view.getId()) {
+                    case R.id.left_forward:
+                        setTimerTask(0);
+                        break;
+                    case R.id.left_backward:
+                        setTimerTask(1);
+                        break;
+                    case R.id.right_forward:
+                        setTimerTask(2);
+                        break;
+                    case R.id.right_backward:
+                        setTimerTask(3);
+                        break;
+                }
+            }
+            //抬起操作
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                cancelTimerTask();
+
+                Message msg = new Message();
+                msg.what = 12;
+                handler.sendMessage(msg);
+            }
+            //移动操作
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+            }
+            return false;
+        }
+    };
 
     private TextView text1;
 
     private String str_ip;
     private String str_speed;
-    private Button but_center;
-    private Button but_left;
-    private Button but_right;
-    private Button but_up;
-    private Button but_below;
+
+    private Button btn_left_froward;
+    private Button btn_left_stop;
+    private Button btn_left_backward;
+    private Button btn_right_forward;
+    private Button btn_right_stop;
+    private Button btn_right_backward;
+
     private Button but_r_speenUp;
     private Button but_l_speenUp;
 
@@ -47,6 +87,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
     private int StrSend;
 
     private ConnectDataHelper mConnectDataHelper = null;
+    private MoveDataHelper mMoveDataHelper = null;
 
 
     @Override
@@ -58,6 +99,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
         initView();
 
         mConnectDataHelper = new ConnectDataHelper();
+        mMoveDataHelper = new MoveDataHelper();
 
         if (!WifiManager.isWifiConnected(this)) {
             text1.setText(R.string.str_con);
@@ -75,116 +117,26 @@ public class BenDiActivity extends Activity implements OnClickListener {
 
     public void initView() {
         text1 = (TextView) findViewById(R.id.text1);
-        mainlayout = (RelativeLayout) findViewById(R.id.mainlayout);
-        but_center = (Button) findViewById(R.id.but_center);
-        but_left = (Button) findViewById(R.id.but_left);
-        but_right = (Button) findViewById(R.id.but_right);
-        but_up = (Button) findViewById(R.id.but_up);
-        but_below = (Button) findViewById(R.id.but_below);
+        but1 = (Button) findViewById(R.id.but1);
+
         but_l_speenUp = (Button) findViewById(R.id.but_l_speenUp);
         but_r_speenUp = (Button) findViewById(R.id.but_r_speenUp);
-        but1 = (Button) findViewById(R.id.but1);
         seek = (SeekBar) findViewById(R.id.seek);
         seek.setEnabled(false);
 
-        but_left.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //按下操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//		        	Log.e("按下操作", "按下操作"); 
-                    setTimerTask(3);
-                }
-                //抬起操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//		        	Log.e("抬起操作", "抬起操作"); 
-                    cancelTimerTask();
+        mainlayout = (RelativeLayout) findViewById(R.id.mainlayout);
+        btn_left_froward = (Button) findViewById(R.id.left_forward);
+        btn_left_stop = (Button) findViewById(R.id.left_stop);
+        btn_left_backward = (Button) findViewById(R.id.left_backward);
+        btn_right_forward = (Button) findViewById(R.id.right_forward);
+        btn_right_stop = (Button) findViewById(R.id.right_stop);
+        btn_right_backward = (Button) findViewById(R.id.right_backward);
+        
+        btn_left_froward.setOnTouchListener(onTouchListener);
+        btn_left_backward.setOnTouchListener(onTouchListener);
+        btn_right_forward.setOnTouchListener(onTouchListener);
+        btn_right_backward.setOnTouchListener(onTouchListener);
 
-                    Message msg = new Message();
-                    msg.what = 12;
-                    handler.sendMessage(msg);
-                }
-                //移动操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-//		        	Log.e("移动操作", "移动操作"); 
-                }
-                return false;
-            }
-        });
-        but_right.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //按下操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//		        	Log.e("按下操作", "按下操作"); 
-                    setTimerTask(4);
-                }
-                //抬起操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//		        	Log.e("抬起操作", "抬起操作"); 
-                    cancelTimerTask();
-
-                    Message msg = new Message();
-                    msg.what = 12;
-                    handler.sendMessage(msg);
-                }
-                //移动操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-//		        	Log.e("移动操作", "移动操作"); 
-                }
-                return false;
-            }
-        });
-        but_up.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //按下操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//		        	Log.e("按下操作", "按下操作"); 
-                    setTimerTask(1);
-                }
-                //抬起操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//		        	Log.e("抬起操作", "抬起操作"); 
-                    cancelTimerTask();
-
-                    Message msg = new Message();
-                    msg.what = 12;
-                    handler.sendMessage(msg);
-                }
-                //移动操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-//		        	Log.e("移动操作", "移动操作"); 
-                }
-                return false;
-            }
-        });
-        but_below.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //按下操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//		        	Log.e("按下操作", "按下操作"); 
-                    setTimerTask(2);
-                }
-                //抬起操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//		        	Log.e("抬起操作", "抬起操作"); 
-                    cancelTimerTask();
-
-                    Message msg = new Message();
-                    msg.what = 12;
-                    handler.sendMessage(msg);
-                }
-                //移动操作
-                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-//		        	Log.e("移动操作", "移动操作"); 
-                }
-                return false;
-            }
-        });
-
-        but_center.setOnClickListener(this);
         but_l_speenUp.setOnClickListener(this);
         but_r_speenUp.setOnClickListener(this);
         but1.setOnClickListener(this);
@@ -201,16 +153,13 @@ public class BenDiActivity extends Activity implements OnClickListener {
                 msg.what = 11;
                 handler.sendMessage(msg);
             }
-        }, 100, 1000);
+        }, 100, 100);
     }
 
     private void cancelTimerTask() {
         StrSend = -1;
         mTimer.cancel();
     }
-
-
-
 
     Handler handler = new Handler() {
 
@@ -252,35 +201,24 @@ public class BenDiActivity extends Activity implements OnClickListener {
                     break;
                 case 11:
                     switch (StrSend) {
+                        case 0:
+                            mMoveDataHelper.sendDirection(Direction.LETF_FORWARD);
+                            break;
                         case 1:
-                            str_instr = "前进";
-//                            send("1");
+                            mMoveDataHelper.sendDirection(Direction.LEFT_BACKEARD);
                             break;
                         case 2:
-                            str_instr = "后退";
-//                            send("2");
+                            mMoveDataHelper.sendDirection(Direction.RIGHT_FORWARD);
                             break;
                         case 3:
-                            str_instr = "左转";
-//                            send("3");
-                            break;
-                        case 4:
-                            str_instr = "右转";
-//                            send("4");
-                            break;
-                        case 5:
-                            break;
-                        case 6:
-                            break;
-                        default:
+                            mMoveDataHelper.sendDirection(Direction.RIGHT_BACKEARD);
                             break;
                     }
-
                     break;
-
                 case 12:
                     str_instr = "停止";
-//                    send("0");
+                    mMoveDataHelper.sendDirection(Direction.LEFT_STOP);
+                    mMoveDataHelper.sendDirection(Direction.RIGHT_STOP);
                     break;
                 default:
                     break;
@@ -293,23 +231,23 @@ public class BenDiActivity extends Activity implements OnClickListener {
     public void onClick(View v) {
         // TODO Auto-generated method stub
         switch (v.getId()) {
-            case R.id.but_center:
-                str_instr = "停止";
+//            case R.id.but_center:
+//                str_instr = "停止";
 //                send("0");
-                break;
-//		case R.id.but_left:
+//                break;
+//		case R.id.btn_left_stop:
 //			str_instr = "左转";
 //			send("3");
 //			break;
-//		case R.id.but_right:
+//		case R.id.btn_left_backward:
 //			str_instr = "右转";
 //			send("4");
 //			break;
-//		case R.id.but_up:
+//		case R.id.btn_right_forward:
 //			str_instr = "前进";
 //			send("1");
 //			break;
-//		case R.id.but_below:
+//		case R.id.btn_rigth_stop:
 //			str_instr = "后退";
 //			send("2");
 //			break;

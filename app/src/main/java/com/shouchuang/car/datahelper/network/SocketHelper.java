@@ -42,6 +42,7 @@ public class SocketHelper {
 
     public void setSendData(String commandStr, String address, int port) throws UnknownHostException {
         mOutBuff = commandStr.getBytes();
+        Log.e("SkyTest", "Command :" + commandStr);
         this.mAddress = InetAddress.getByName(address);
         this.mOutPacket = new DatagramPacket(mOutBuff, mOutBuff.length, mAddress, port);
     }
