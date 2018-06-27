@@ -17,6 +17,8 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
     private SocketHelper mSocketHelper;
     Timer mTimer;
 
+    int repeat_command = -1;
+
     public MoveDataHelper() {
         mSocketHelper = new SocketHelper(200);
         mSocketHelper.setResponseListener(this);
@@ -43,7 +45,11 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
 
 
     public void move(Direction leftWheel, Direction rightWheel) {
-        int command = (rightWheel.getValue() << 2) & leftWheel.getValue();
+        Log.e("skyTest", leftWheel.getValue() + "   " + rightWheel.getValue());
+        int command = (leftWheel.getValue() << 2) ^ rightWheel.getValue();
+        if (command == repeat_command) {
+            return;
+        }
         try {
             stop();
             mSocketHelper.setSendData(COMMAND_SUB_STR + command, CAR_IP, CONNECT_PORT_LEFT);
@@ -57,6 +63,7 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
                 mSocketHelper.send();
             }
         }, 500, 500);
+        repeat_command = command;
     }
 
     public void stop() {
