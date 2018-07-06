@@ -15,6 +15,15 @@ import java.net.UnknownHostException;
 
 public class SocketHelper {
 
+    public SocketHelper(int _timeOut) {
+        try {
+            mSocket = new MulticastSocket();
+            mSocket.setSoTimeout(_timeOut);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public interface ScocketResponseListener {
         void receiveSucceed(String data);
 
@@ -24,10 +33,6 @@ public class SocketHelper {
     private static final int DATA_LEN = 1024;
 
     public ScocketResponseListener mResponseListener = null;
-
-    public void setResponseListener(ScocketResponseListener responseListener) {
-        this.mResponseListener = responseListener;
-    }
 
     private MulticastSocket mSocket;
 
@@ -42,29 +47,32 @@ public class SocketHelper {
 
     public void setSendData(String commandStr, String address, int port) throws UnknownHostException {
         mOutBuff = commandStr.getBytes();
-        Log.e("SkyTest", "Command :" + commandStr);
         this.mAddress = InetAddress.getByName(address);
         this.mOutPacket = new DatagramPacket(mOutBuff, mOutBuff.length, mAddress, port);
     }
 
-    public void creatSocket(int timeOut) throws IOException {
-        mSocket = new MulticastSocket();
-        mSocket.setSoTimeout(timeOut);
+    public void setResponseListener(ScocketResponseListener responseListener) {
+        this.mResponseListener = responseListener;
     }
 
-    public void send() throws IOException {
+    public void send() {
         if (mOutPacket != null && mSocket != null) {
-            mSocket.send(mOutPacket);
-            mSocket.receive(mInPacket);
-            int dataLegth = mInPacket.getLength();
-            if (dataLegth > 0) {
-                mResult = new String(mInBuff, 0, dataLegth);
-                if (!TextUtils.isEmpty(mResult)) {
-                    mResponseListener.receiveSucceed(mResult);
+            try {
+                Log.e("SkyTest", "Command :" + new String(mOutPacket.getData(), 0, mOutPacket.getLength()));
+                mSocket.send(mOutPacket);
+                mSocket.receive(mInPacket);
+                int dataLegth = mInPacket.getLength();
+                if (dataLegth > 0) {
+                    mResult = new String(mInBuff, 0, dataLegth);
+                    if (!TextUtils.isEmpty(mResult)) {
+                        mResponseListener.receiveSucceed(mResult);
+                    } else {
+                        mResponseListener.receiveSucceed("");
+                    }
                 } else {
-                    mResponseListener.receiveSucceed("");
+                    mResponseListener.receiveError();
                 }
-            } else {
+            } catch (IOException e) {
                 mResponseListener.receiveError();
             }
         } else {

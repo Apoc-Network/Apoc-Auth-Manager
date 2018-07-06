@@ -22,30 +22,23 @@ public class ConnectDataHelper implements SocketHelper.ScocketResponseListener {
     private boolean mHasConnected = false;
 
     public ConnectDataHelper() {
-        mSocketHelper = new SocketHelper();
+        mSocketHelper = new SocketHelper(1000);
         mSocketHelper.setResponseListener(this);
+        try {
+            mSocketHelper.setSendData(COMMAND_STR, MASK_IP, CONNECT_PORT);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
     public void connectCar() {
-        try {
-            mSocketHelper.setSendData(COMMAND_STR, MASK_IP, CONNECT_PORT);
-            mSocketHelper.creatSocket(1000);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // 发送的数据包，局网内的所有地址都可以收到该数据包
         new Thread() {
             @Override
             public void run() {
                 super.run();
                 for (int i = 0; i < 6 && !mHasConnected; i++) {
-                    try {
-                        mSocketHelper.send();
-                    } catch (IOException e) {
-                        Log.e("SkyTest", "Receive Timeout!!");
-                    }
+                    mSocketHelper.send();
                 }
             }
         }.start();

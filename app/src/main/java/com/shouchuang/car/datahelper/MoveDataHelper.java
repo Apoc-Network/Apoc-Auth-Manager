@@ -7,18 +7,27 @@ import com.shouchuang.car.datahelper.network.SocketHelper;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
 
     public static final String COMMAND_SUB_STR = "cmd=control&d=";
-    public static final String MASK_IP = "192.168.4.1";
-    public static final int CONNECT_PORT = 8089;
+    public static final String CAR_IP = "192.168.4.1";
+    public static final int CONNECT_PORT_LEFT = 8089;
+    public static final int CONNECT_PORT_RIGHT = 8089;
 
-    private SocketHelper mSocketHelper;
+    private SocketHelper mLeftWheelSocketHelper;
+    private SocketHelper mRightWheelSocketHelper;
+
+    Timer mTimer_left;
+    Timer mTimer_right;
 
     public MoveDataHelper() {
-        mSocketHelper = new SocketHelper();
-        mSocketHelper.setResponseListener(this);
+        mLeftWheelSocketHelper = new SocketHelper(200);
+        mLeftWheelSocketHelper.setResponseListener(this);
+        mRightWheelSocketHelper = new SocketHelper(200);
+        mRightWheelSocketHelper.setResponseListener(this);
     }
 
     @Override
@@ -37,30 +46,54 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
 
     @Override
     public void receiveError() {
-        Log.e("SkyTest", "Connect Car ERROR!!!");
+        Log.e("SkyTest", "Move Command receive TIMEOUT");
     }
 
 
-    public void sendDirection(Direction _direction) {
+    public void move(Direction _direction) {
 
-        try {
-            mSocketHelper.setSendData(COMMAND_SUB_STR + _direction.getValue(), MASK_IP, CONNECT_PORT);
-            mSocketHelper.creatSocket(4);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    mSocketHelper.send();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (_direction == Direction.LETF_FORWARD
+                || _direction == Direction.LEFT_BACKEARD
+                || _direction == Direction.LEFT_STOP) {
+            try {
+                mLeftWheelSocketHelper.setSendData(COMMAND_SUB_STR + _direction.getValue(),
+                        CAR_IP, CONNECT_PORT_LEFT);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
             }
-        }.start();
+            mTimer_left = new Timer();
+            mTimer_left.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mLeftWheelSocketHelper.send();
+                }
+            }, 0, 1000);
+        } else if (_direction == Direction.RIGHT_FORWARD
+                || _direction == Direction.RIGHT_BACKEARD
+                || _direction == Direction.RIGHT_STOP) {
+            try {
+                mRightWheelSocketHelper.setSendData(COMMAND_SUB_STR + _direction.getValue(),
+                        CAR_IP, CONNECT_PORT_RIGHT);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            mTimer_right = new Timer();
+            mTimer_right.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mRightWheelSocketHelper.send();
+                }
+            }, 0, 1000);
+        }
+    }
+
+    public void cancelLeftSend() {
+        if (mTimer_left != null)
+            mTimer_left.cancel();
+    }
+
+    public void cancelRightSend() {
+        if (mTimer_right != null)
+            mTimer_right.cancel();
     }
 }
