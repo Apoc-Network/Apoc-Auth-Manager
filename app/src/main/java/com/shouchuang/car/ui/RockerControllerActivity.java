@@ -12,6 +12,9 @@ import com.shouchuang.car.ui.widget.VerticalSeekBar;
 
 public class RockerControllerActivity extends Activity {
 
+    public static final int DIRECTION_RECOGNITION_OFFSET = 5;
+
+
 
     private VerticalSeekBar mLeftRocker;
     private VerticalSeekBar mRightRocker;
@@ -36,13 +39,15 @@ public class RockerControllerActivity extends Activity {
     private void findView() {
         mLeftRocker = (VerticalSeekBar) findViewById(R.id.left_rocker);
         mRightRocker = (VerticalSeekBar) findViewById(R.id.right_rocker);
+        mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
         mLeftRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                // two direction divide progress into two part
                 mLeftspeed = i - 50;
-                if (mLeftspeed < -5) {
+                if (mLeftspeed < -DIRECTION_RECOGNITION_OFFSET) {
                     mLeftWheel = Direction.BACKWARD;
-                } else if (mLeftspeed > 5) {
+                } else if (mLeftspeed > DIRECTION_RECOGNITION_OFFSET) {
                     mLeftWheel = Direction.FORWARD;
                 } else {
                     mLeftWheel = Direction.STOP;
@@ -58,16 +63,16 @@ public class RockerControllerActivity extends Activity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekBar.setProgress(50);
-                ((VerticalSeekBar) seekBar).notifyProgressBar();
             }
         });
         mRightRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                // two direction divide progress into two part
                 mRightspeed = i - 50;
-                if (mRightspeed < -5) {
+                if (mRightspeed < -DIRECTION_RECOGNITION_OFFSET) {
                     mRightWheel = Direction.BACKWARD;
-                } else if (mRightspeed > 5) {
+                } else if (mRightspeed > DIRECTION_RECOGNITION_OFFSET) {
                     mRightWheel = Direction.FORWARD;
                 } else {
                     mRightWheel = Direction.STOP;
@@ -83,10 +88,8 @@ public class RockerControllerActivity extends Activity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekBar.setProgress(50);
-                ((VerticalSeekBar) seekBar).notifyProgressBar();
             }
         });
-        mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
     }
 
     private void drawDashboard() {
