@@ -1,12 +1,12 @@
 <resources>
 
-<string name="app_name">DoitCar</string>
+    <string name="app_name">DoitCar</string>
 
     <string name="str_bendi">Local Mode</string>
     <string name="retry">Reconnect</string>
     <string name="str_con">Please connect to the Wifi or the AP of car</string>
-    <string name="str_son_s">Connect Success</string>    
-     <string name="str_d_f">Device offline, make sure connect to the wifi or the LAN of Doit_ESP_xxxxxx</string>  
+    <string name="str_son_s">Connect Success</string>
+    <string name="str_d_f">Device offline, make sure connect to the wifi or the LAN of Doit_ESP_xxxxxx</string>
     <string name="str_con_car">Connecting to the car</string>
 
 

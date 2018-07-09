@@ -24,7 +24,7 @@ import com.shouchuang.car.datahelper.Direction;
 import com.shouchuang.car.datahelper.MoveDataHelper;
 import com.shouchuang.car.utils.WifiManager;
 
-public class BenDiActivity extends Activity implements OnClickListener {
+public class ButtonControllerActivity extends Activity implements OnClickListener {
 
     View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
