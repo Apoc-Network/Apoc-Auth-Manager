@@ -8,6 +8,11 @@
     <string name="str_son_s">Connect Success</string>
     <string name="str_d_f">Device offline, make sure connect to the wifi or the LAN of Doit_ESP_xxxxxx</string>
     <string name="str_con_car">Connecting to the car</string>
+    <string name="title_activity_console_chosen">ConsoleChosenActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_controller_select">ControllerSelectActivity</string>
 
 
 </resources>
