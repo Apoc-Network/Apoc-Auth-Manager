@@ -14,8 +14,6 @@ public class RockerControllerActivity extends Activity {
 
     public static final int DIRECTION_RECOGNITION_OFFSET = 5;
 
-
-
     private VerticalSeekBar mLeftRocker;
     private VerticalSeekBar mRightRocker;
     private DashboardView mDashboardView;
@@ -92,6 +90,9 @@ public class RockerControllerActivity extends Activity {
         });
     }
 
+    /**
+     * update DashBoard view
+     */
     private void drawDashboard() {
         mDashboardView.setVelocity(Math.abs(mLeftspeed) + Math.abs(mRightspeed));
     }
