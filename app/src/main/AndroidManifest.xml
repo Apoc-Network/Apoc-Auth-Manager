@@ -62,7 +62,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.zhida.car.ui.RockerControllerActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

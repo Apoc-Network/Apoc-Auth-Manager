@@ -2,18 +2,24 @@ package com.zhida.car.ui.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.SeekBar;
+
+import com.zhida.car.utils.LogUtils;
 
 /**
  * Created by skylan on 16/12/27.
  */
 
-public class VerticalSeekBar extends android.support.v7.widget.AppCompatSeekBar {
+public class VerticalSeekBar extends SeekBar {
 
     private Drawable mThumb;
+    private View mTouchableAreaView;
+    private Rect mTouchableArea;
 
     public VerticalSeekBar(Context context) {
         super(context);
@@ -35,6 +41,10 @@ public class VerticalSeekBar extends android.support.v7.widget.AppCompatSeekBar 
         onSizeChanged(getWidth(), getHeight(), 0, 0);
     }
 
+    public void setTouchArea(View view) {
+        mTouchableAreaView = view;
+    }
+
     @Override
     public void setThumb(Drawable thumb) {
         super.setThumb(thumb);
@@ -50,7 +60,6 @@ public class VerticalSeekBar extends android.support.v7.widget.AppCompatSeekBar 
     protected void onDraw(Canvas c) {
         c.rotate(-90);
         c.translate(-getHeight(), 0);
-
         super.onDraw(c);
     }
 
@@ -69,6 +78,22 @@ public class VerticalSeekBar extends android.support.v7.widget.AppCompatSeekBar 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
+                if (mTouchableAreaView != null && mTouchableArea == null) {
+                    mTouchableArea = new Rect();
+                    mTouchableAreaView.getDrawingRect(mTouchableArea);
+                    int[] location = new int[2];
+                    mTouchableAreaView.getLocationOnScreen(location);
+                    mTouchableArea.left = location[0];
+                    mTouchableArea.top = location[1];
+                    mTouchableArea.right = mTouchableArea.right + location[0];
+                    mTouchableArea.bottom = mTouchableArea.bottom + location[1];
+                    LogUtils.e("test", "" + mTouchableArea);
+                }
+                if (mTouchableArea != null &&
+                        !mTouchableArea.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    setProgress(50);
+                    break;
+                }
                 setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
                 break;

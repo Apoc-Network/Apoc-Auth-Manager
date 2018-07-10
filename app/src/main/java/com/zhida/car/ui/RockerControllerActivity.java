@@ -7,7 +7,6 @@ import android.widget.SeekBar;
 import com.zhida.car.R;
 import com.zhida.car.component.Motor;
 import com.zhida.car.datahelper.MoveDataHelper;
-import com.zhida.car.ui.widget.DashboardView;
 import com.zhida.car.ui.widget.VerticalSeekBar;
 
 public class RockerControllerActivity extends Activity {
@@ -18,7 +17,7 @@ public class RockerControllerActivity extends Activity {
 
     private VerticalSeekBar mLeftRocker;
     private VerticalSeekBar mRightRocker;
-    private DashboardView mDashboardView;
+//    private DashboardView mDashboardView;
 
     private MoveDataHelper dataHelper;
 
@@ -32,6 +31,7 @@ public class RockerControllerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rocker_controller);
+
         findView();
         dataHelper = new MoveDataHelper();
     }
@@ -39,8 +39,9 @@ public class RockerControllerActivity extends Activity {
     private void findView() {
         mLeftRocker = (VerticalSeekBar) findViewById(R.id.left_rocker);
         mRightRocker = (VerticalSeekBar) findViewById(R.id.right_rocker);
-        mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
+//        mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
 
+        mLeftRocker.setTouchArea(findViewById(R.id.left_touch_area));
         mLeftRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -61,6 +62,7 @@ public class RockerControllerActivity extends Activity {
             }
         });
 
+        mRightRocker.setTouchArea(findViewById(R.id.right_touch_area));
         mRightRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -103,7 +105,7 @@ public class RockerControllerActivity extends Activity {
      * update DashBoard view
      */
     private void drawDashboard() {
-        mDashboardView.setVelocity(Math.abs(mLeftspeed) + Math.abs(mRightspeed));
+//        mDashboardView.setVelocity(Math.abs(mLeftspeed) + Math.abs(mRightspeed));
     }
 
     @Override
