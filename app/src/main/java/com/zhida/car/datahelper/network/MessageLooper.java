@@ -37,12 +37,13 @@ public class MessageLooper {
             cancelTask();
 
             mTimer = new Timer();
+            // set delay to a non-zero time avoid send message at one time
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     mMsg.send(mContent);
                 }
-            }, 0, mPeriod);
+            }, 50, mPeriod);
 
         }
     }

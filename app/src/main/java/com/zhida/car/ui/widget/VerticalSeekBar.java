@@ -11,7 +11,7 @@ import android.widget.SeekBar;
  * Created by skylan on 16/12/27.
  */
 
-public class VerticalSeekBar extends SeekBar {
+public class VerticalSeekBar extends android.support.v7.widget.AppCompatSeekBar {
 
     private Drawable mThumb;
 

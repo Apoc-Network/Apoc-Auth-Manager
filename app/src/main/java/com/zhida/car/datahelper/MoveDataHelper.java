@@ -1,5 +1,6 @@
 package com.zhida.car.datahelper;
 
+import com.zhida.car.component.Motor;
 import com.zhida.car.datahelper.network.MessageLooper;
 import com.zhida.car.datahelper.network.MessageManager;
 
@@ -17,9 +18,9 @@ public class MoveDataHelper extends BaseDataHelper {
         mLooper.setListener(this);
     }
 
-    public void move(Direction leftWheel, Direction rightWheel) {
+    public void move(Motor leftWheel, Motor rightWheel) {
         // combine left wheel command and right wheel command into one
-        int command = (leftWheel.getValue() << 2) ^ rightWheel.getValue();
+        int command = (leftWheel.getAction() << 4) | rightWheel.getAction();
         // change 10 to 'a'
         String commandStr = COMMAND_SUB_STR + (command == 10 ? "a" : String.valueOf(command));
         mLooper.send(commandStr);

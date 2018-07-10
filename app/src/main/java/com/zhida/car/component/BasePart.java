@@ -1,4 +1,4 @@
-package com.zhida.car.component.parts;
+package com.zhida.car.component;
 
 /**
  * Created by skylan on 17/2/19.

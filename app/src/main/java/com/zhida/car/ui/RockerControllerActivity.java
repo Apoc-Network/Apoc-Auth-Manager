@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.SeekBar;
 
 import com.zhida.car.R;
-import com.zhida.car.datahelper.Direction;
+import com.zhida.car.component.Motor;
 import com.zhida.car.datahelper.MoveDataHelper;
 import com.zhida.car.ui.widget.DashboardView;
 import com.zhida.car.ui.widget.VerticalSeekBar;
@@ -13,6 +13,8 @@ import com.zhida.car.ui.widget.VerticalSeekBar;
 public class RockerControllerActivity extends Activity {
 
     public static final int DIRECTION_RECOGNITION_OFFSET = 5;
+    public static final int MIDDLE_SPEED_LEVEL = 20;
+    public static final int HIGH_SPEED_LEVEL = 35;
 
     private VerticalSeekBar mLeftRocker;
     private VerticalSeekBar mRightRocker;
@@ -22,8 +24,8 @@ public class RockerControllerActivity extends Activity {
 
     private int mLeftspeed = 0;
     private int mRightspeed = 0;
-    private Direction mLeftWheel = Direction.STOP;
-    private Direction mRightWheel = Direction.STOP;
+    private Motor mLeftMotor = new Motor();
+    private Motor mRightMotor = new Motor();
 
 
     @Override
@@ -38,20 +40,15 @@ public class RockerControllerActivity extends Activity {
         mLeftRocker = (VerticalSeekBar) findViewById(R.id.left_rocker);
         mRightRocker = (VerticalSeekBar) findViewById(R.id.right_rocker);
         mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
+
         mLeftRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 // two direction divide progress into two part
                 mLeftspeed = i - 50;
-                if (mLeftspeed < -DIRECTION_RECOGNITION_OFFSET) {
-                    mLeftWheel = Direction.BACKWARD;
-                } else if (mLeftspeed > DIRECTION_RECOGNITION_OFFSET) {
-                    mLeftWheel = Direction.FORWARD;
-                } else {
-                    mLeftWheel = Direction.STOP;
-                }
+                updateMotor(mLeftspeed, mLeftMotor);
                 drawDashboard();
-                dataHelper.move(mLeftWheel, mRightWheel);
+                dataHelper.move(mLeftMotor, mRightMotor);
             }
 
             @Override
@@ -63,20 +60,15 @@ public class RockerControllerActivity extends Activity {
                 seekBar.setProgress(50);
             }
         });
+
         mRightRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 // two direction divide progress into two part
                 mRightspeed = i - 50;
-                if (mRightspeed < -DIRECTION_RECOGNITION_OFFSET) {
-                    mRightWheel = Direction.BACKWARD;
-                } else if (mRightspeed > DIRECTION_RECOGNITION_OFFSET) {
-                    mRightWheel = Direction.FORWARD;
-                } else {
-                    mRightWheel = Direction.STOP;
-                }
+                updateMotor(mRightspeed, mRightMotor);
                 drawDashboard();
-                dataHelper.move(mLeftWheel, mRightWheel);
+                dataHelper.move(mLeftMotor, mRightMotor);
             }
 
             @Override
@@ -88,6 +80,23 @@ public class RockerControllerActivity extends Activity {
                 seekBar.setProgress(50);
             }
         });
+    }
+
+    private void updateMotor(int motorSpeed, Motor motor) {
+        if (motorSpeed < -DIRECTION_RECOGNITION_OFFSET) {
+            motor.setDirection(Motor.Direction.BACKWARD);
+        } else if (motorSpeed > DIRECTION_RECOGNITION_OFFSET) {
+            motor.setDirection( Motor.Direction.FORWARD);
+        } else {
+            motor.setDirection(Motor.Direction.STOP);
+        }
+        if (Math.abs(motorSpeed) < MIDDLE_SPEED_LEVEL) {
+            motor.setSpeed(Motor.Speed.SLOW);
+        } else if (Math.abs(motorSpeed) >= HIGH_SPEED_LEVEL) {
+            motor.setSpeed(Motor.Speed.HIGH);
+        } else {
+            motor.setSpeed(Motor.Speed.MEDIUM);
+        }
     }
 
     /**
