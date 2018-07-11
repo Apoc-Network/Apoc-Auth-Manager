@@ -27,15 +27,6 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
     @Override
     public void receiveSucceed(String data) {
         Log.e("SkyTest", "Move Action" + data);
-//        if (str_udp2 == "ok") {
-//            Message msg = new Message();
-//            msg.what = 2;
-//            handler.sendMessage(msg);
-//        } else {
-//            Message msg = new Message();
-//            msg.what = 3;
-//            handler.sendMessage(msg);
-//        }
     }
 
     @Override
@@ -45,6 +36,7 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
 
 
     public void move(Direction leftWheel, Direction rightWheel) {
+        // combine left wheel command and right wheel command into one
         int command = (leftWheel.getValue() << 2) ^ rightWheel.getValue();
         if (command == repeat_command) {
             return;
@@ -52,7 +44,9 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
         repeat_command = command;
 
         try {
+            // cancel last TemerTask
             cancelTask();
+
             // change 10 to 'a'
             mSocketHelper.setSendData(COMMAND_SUB_STR + (command == 10?"a":String.valueOf(command)),
                     CAR_IP, CONNECT_PORT_LEFT);
