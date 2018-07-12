@@ -1,4 +1,4 @@
-package com.shouchuang.car.datahelper.network;
+package com.zhida.car.datahelper.network;
 
 import android.text.TextUtils;
 import android.util.Log;

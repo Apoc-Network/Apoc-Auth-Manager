@@ -1,8 +1,8 @@
-package com.shouchuang.car.datahelper;
+package com.zhida.car.datahelper;
 
 import android.util.Log;
 
-import com.shouchuang.car.datahelper.network.SocketHelper;
+import com.zhida.car.datahelper.network.SocketHelper;
 
 import java.net.UnknownHostException;
 import java.util.Timer;

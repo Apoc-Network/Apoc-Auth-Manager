@@ -1,14 +1,14 @@
-package com.shouchuang.car.ui;
+package com.zhida.car.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 
-import com.shouchuang.car.R;
-import com.shouchuang.car.datahelper.Direction;
-import com.shouchuang.car.datahelper.MoveDataHelper;
-import com.shouchuang.car.ui.widget.DashboardView;
-import com.shouchuang.car.ui.widget.VerticalSeekBar;
+import com.zhida.car.R;
+import com.zhida.car.datahelper.Direction;
+import com.zhida.car.datahelper.MoveDataHelper;
+import com.zhida.car.ui.widget.DashboardView;
+import com.zhida.car.ui.widget.VerticalSeekBar;
 
 public class RockerControllerActivity extends Activity {
 

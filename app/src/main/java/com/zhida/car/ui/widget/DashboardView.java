@@ -1,4 +1,4 @@
-package com.shouchuang.car.ui.widget;
+package com.zhida.car.ui.widget;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.shouchuang.car.R;
+import com.zhida.car.R;
 
 /**
  * DashboardView style 4，仿汽车速度仪表盘

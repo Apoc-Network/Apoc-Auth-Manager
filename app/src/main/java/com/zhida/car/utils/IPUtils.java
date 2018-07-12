@@ -1,4 +1,4 @@
-package com.shouchuang.car.utils;
+package com.zhida.car.utils;
 
 /**
  * Created by skylan on 16/12/25.

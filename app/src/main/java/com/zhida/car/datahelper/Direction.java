@@ -1,4 +1,4 @@
-package com.shouchuang.car.datahelper;
+package com.zhida.car.datahelper;
 
 /**
  * Created by skylan on 16/12/25.

@@ -1,4 +1,4 @@
-package com.shouchuang.car.utils;
+package com.zhida.car.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

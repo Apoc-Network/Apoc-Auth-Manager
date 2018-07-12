@@ -1,4 +1,4 @@
-package com.shouchuang.car.component.hardware;
+package com.zhida.car.component.hardware;
 
 /**
  * Created by skylan on 17/2/19.
