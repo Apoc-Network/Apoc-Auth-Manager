@@ -59,7 +59,6 @@ public class RockerControllerActivity extends Activity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekBar.setProgress(50);
                 ((VerticalSeekBar) seekBar).notifyProgressBar();
-                dataHelper.stop();
             }
         });
         mRightRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -85,7 +84,6 @@ public class RockerControllerActivity extends Activity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekBar.setProgress(50);
                 ((VerticalSeekBar) seekBar).notifyProgressBar();
-                dataHelper.stop();
             }
         });
         mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
