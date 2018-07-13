@@ -1,6 +1,7 @@
 package com.shouchuang.car.datahelper.network;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -16,6 +17,7 @@ public class SocketHelper {
 
     public interface ScocketResponseListener {
         void receiveSucceed(String data);
+
         void receiveError();
     }
 
@@ -50,21 +52,32 @@ public class SocketHelper {
     }
 
     public void send() throws IOException {
-        if (mOutPacket != null) {
+        if (mOutPacket != null && mSocket != null) {
             mSocket.send(mOutPacket);
-        }
-        mSocket.receive(mInPacket);
-        int dataLegth = mInPacket.getLength();
-        if (dataLegth > 0) {
-            mResult = new String(mInBuff, 0, dataLegth);
-            if (!TextUtils.isEmpty(mResult)) {
-                mResponseListener.receiveSucceed(mResult);
+            mSocket.receive(mInPacket);
+            int dataLegth = mInPacket.getLength();
+            if (dataLegth > 0) {
+                mResult = new String(mInBuff, 0, dataLegth);
+                if (!TextUtils.isEmpty(mResult)) {
+                    mResponseListener.receiveSucceed(mResult);
+                } else {
+                    mResponseListener.receiveSucceed("");
+                }
             } else {
-                mResponseListener.receiveSucceed("");
+                mResponseListener.receiveError();
             }
         } else {
+            Log.e("SkyTest", "Please init packet and socket");
             mResponseListener.receiveError();
         }
+    }
+
+    public void release() {
+        mSocket.close();
+        mInPacket = null;
+        mOutPacket = null;
+        mInBuff = null;
+        mOutBuff = null;
     }
 
 }

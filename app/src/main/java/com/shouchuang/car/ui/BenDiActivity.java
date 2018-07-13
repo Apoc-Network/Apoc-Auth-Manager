@@ -1,9 +1,5 @@
 package com.shouchuang.car.ui;
 
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,7 +19,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shouchuang.car.R;
-import com.shouchuang.car.utils.IPUtils;
+import com.shouchuang.car.datahelper.ConnectDataHelper;
 import com.shouchuang.car.utils.WifiManager;
 
 public class BenDiActivity extends Activity implements OnClickListener {
@@ -50,6 +46,8 @@ public class BenDiActivity extends Activity implements OnClickListener {
     private Timer mTimer;
     private int StrSend;
 
+    private ConnectDataHelper mConnectDataHelper = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +57,8 @@ public class BenDiActivity extends Activity implements OnClickListener {
 
         initView();
 
+        mConnectDataHelper = new ConnectDataHelper();
+
         if (!WifiManager.isWifiConnected(this)) {
             text1.setText(R.string.str_con);
             Intent intent = new Intent();
@@ -66,7 +66,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
             startActivity(intent);
             but1.setVisibility(View.VISIBLE);
         } else {
-            connectcar();
+            mConnectDataHelper.connectCar();
         }
 
 //        wifi_ssid = WifiManager.getConnectWifiSsid(this);
@@ -231,10 +231,10 @@ public class BenDiActivity extends Activity implements OnClickListener {
                 case 1:
                     text1.setText(R.string.str_son_s);
                     but1.setVisibility(View.GONE);
-                    str_ip = IPUtils.getip(str_udp1);
+//                    str_ip = IPUtils.getip(str_udp1);
                     System.out.println(str_ip);
                     mainlayout.setVisibility(View.VISIBLE);
-                    getspeed("5");
+//                    getspeed("5");
                     break;
                 case 2:
                     //text1.setText(str_instr + "OK");
@@ -254,19 +254,19 @@ public class BenDiActivity extends Activity implements OnClickListener {
                     switch (StrSend) {
                         case 1:
                             str_instr = "前进";
-                            send("1");
+//                            send("1");
                             break;
                         case 2:
                             str_instr = "后退";
-                            send("2");
+//                            send("2");
                             break;
                         case 3:
                             str_instr = "左转";
-                            send("3");
+//                            send("3");
                             break;
                         case 4:
                             str_instr = "右转";
-                            send("4");
+//                            send("4");
                             break;
                         case 5:
                             break;
@@ -280,7 +280,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
 
                 case 12:
                     str_instr = "停止";
-                    send("0");
+//                    send("0");
                     break;
                 default:
                     break;
@@ -295,7 +295,7 @@ public class BenDiActivity extends Activity implements OnClickListener {
         switch (v.getId()) {
             case R.id.but_center:
                 str_instr = "停止";
-                send("0");
+//                send("0");
                 break;
 //		case R.id.but_left:
 //			str_instr = "左转";
@@ -315,16 +315,16 @@ public class BenDiActivity extends Activity implements OnClickListener {
 //			break;
             case R.id.but_l_speenUp:
                 str_instr = "减速";
-                send("7");
-                getspeed("5");
+//                send("7");
+//                getspeed("5");
                 break;
             case R.id.but_r_speenUp:
                 str_instr = "加速";
-                send("6");
-                getspeed("5");
+//                send("6");
+//                getspeed("5");
                 break;
             case R.id.but1:
-                connectcar();
+                mConnectDataHelper.connectCar();
                 break;
 
             default:

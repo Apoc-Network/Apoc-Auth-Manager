@@ -1,91 +1,65 @@
 package com.shouchuang.car.datahelper;
 
-import android.os.Message;
+import android.util.Log;
+import android.util.StateSet;
 
-import com.shouchuang.car.R;
 import com.shouchuang.car.datahelper.network.SocketHelper;
 
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
+import java.io.IOException;
 import java.net.UnknownHostException;
 
 /**
  * Created by skylan on 16/12/25.
  */
 
-public class ConnectDataHelper implements SocketHelper.ScocketResponseListener{
+public class ConnectDataHelper implements SocketHelper.ScocketResponseListener {
 
     public static final String COMMAND_STR = "cmd=ping";
+    public static final String MASK_IP = "255.255.255.255";
+    public static final int CONNECT_PORT = 8089;
 
-    private SocketHelper socketHelper = new SocketHelper();
+    private SocketHelper mSocketHelper;
+    private boolean mHasConnected = false;
 
-    public void connectcar() {
+    public ConnectDataHelper() {
+        mSocketHelper = new SocketHelper();
+        mSocketHelper.setResponseListener(this);
+    }
 
+    public void connectCar() {
         try {
-            socketHelper.setSendData(COMMAND_STR, "255.255.255.255", 8089);
-            socketHelper.setmTimeOut(10);
+            mSocketHelper.setSendData(COMMAND_STR, MASK_IP, CONNECT_PORT);
+            mSocketHelper.creatSocket(1000);
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         // 发送的数据包，局网内的所有地址都可以收到该数据包
         new Thread() {
-
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 super.run();
-                int i = 0;
-                str_udp1 = null;
-                try {
-                    /* 创建socket实例 */
-                    ms = new MulticastSocket();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                while (i < 6) {
+                for (int i = 0; i < 6 && !mHasConnected; i++) {
                     try {
-                        sleep(300);
-                    } catch (InterruptedException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                        mSocketHelper.send();
+                    } catch (IOException e) {
+                        Log.e("SkyTest", "Receive Timeout!!");
                     }
-
-                    try {
-                        // ms.setTimeToLive(1);
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.err.println("error");
-                    }
-                    i++;
-                }
-                System.out.println("end");
-                ms.close();
-                if (str_udp1 == null) {
-                    Message msg = new Message();
-                    msg.what = 0;
-                    handler.sendMessage(msg);
-                } else {
-                    Message msg = new Message();
-                    msg.what = 1;
-                    handler.sendMessage(msg);
                 }
             }
-
         }.start();
-
     }
 
     @Override
-    public void receiveSucceed() {
-
+    public void receiveSucceed(String data) {
+        Log.e("SkyTest", "Connect Car Result:" + data);
+        mHasConnected = true;
     }
 
     @Override
     public void receiveError() {
-
+        Log.e("SkyTest", "Connect Car ERROR!!!");
     }
+
 }
