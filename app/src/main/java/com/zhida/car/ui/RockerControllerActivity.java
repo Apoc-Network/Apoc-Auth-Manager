@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 
+import com.triggertrap.seekarc.SeekArc;
 import com.zhida.car.R;
 import com.zhida.car.component.Motor;
 import com.zhida.car.datahelper.MoveDataHelper;
@@ -15,9 +16,10 @@ public class RockerControllerActivity extends Activity {
     public static final int MIDDLE_SPEED_LEVEL = 20;
     public static final int HIGH_SPEED_LEVEL = 35;
 
-    private VerticalSeekBar mLeftRocker;
-    private VerticalSeekBar mRightRocker;
-//    private DashboardView mDashboardView;
+    private VerticalSeekBar mLeftMotorRocker;
+    private VerticalSeekBar mRightMotorRocker;
+    private SeekArc mLeftServoRocker;
+    private SeekArc mRightServoRocker;
 
     private MoveDataHelper dataHelper;
 
@@ -37,18 +39,18 @@ public class RockerControllerActivity extends Activity {
     }
 
     private void findView() {
-        mLeftRocker = (VerticalSeekBar) findViewById(R.id.left_rocker);
-        mRightRocker = (VerticalSeekBar) findViewById(R.id.right_rocker);
-//        mDashboardView = (DashboardView) findViewById(R.id.dashboard_view);
+        mLeftMotorRocker = (VerticalSeekBar) findViewById(R.id.rocker_left);
+        mRightMotorRocker = (VerticalSeekBar) findViewById(R.id.rocker_right);
+        mLeftServoRocker = (SeekArc) findViewById(R.id.seekArc_left);
+        mRightServoRocker = (SeekArc) findViewById(R.id.seekArc_right);
 
-        mLeftRocker.setTouchArea(findViewById(R.id.left_touch_area));
-        mLeftRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mLeftMotorRocker.setTouchArea(findViewById(R.id.left_touch_area));
+        mLeftMotorRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 // two direction divide progress into two part
                 mLeftspeed = i - 50;
                 updateMotor(mLeftspeed, mLeftMotor);
-                drawDashboard();
                 dataHelper.move(mLeftMotor, mRightMotor);
             }
 
@@ -62,14 +64,13 @@ public class RockerControllerActivity extends Activity {
             }
         });
 
-        mRightRocker.setTouchArea(findViewById(R.id.right_touch_area));
-        mRightRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mRightMotorRocker.setTouchArea(findViewById(R.id.right_touch_area));
+        mRightMotorRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 // two direction divide progress into two part
                 mRightspeed = i - 50;
                 updateMotor(mRightspeed, mRightMotor);
-                drawDashboard();
                 dataHelper.move(mLeftMotor, mRightMotor);
             }
 
@@ -80,6 +81,40 @@ public class RockerControllerActivity extends Activity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekBar.setProgress(50);
+            }
+        });
+
+        mLeftServoRocker.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+            @Override
+            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekArc seekArc) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekArc seekArc) {
+                seekArc.setProgress(50);
+            }
+        });
+
+        mRightServoRocker.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+            @Override
+            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekArc seekArc) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekArc seekArc) {
+                seekArc.setProgress(50);
             }
         });
     }
@@ -101,12 +136,6 @@ public class RockerControllerActivity extends Activity {
         }
     }
 
-    /**
-     * update DashBoard view
-     */
-    private void drawDashboard() {
-//        mDashboardView.setVelocity(Math.abs(mLeftspeed) + Math.abs(mRightspeed));
-    }
 
     @Override
     protected void onPause() {

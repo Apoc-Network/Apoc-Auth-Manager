@@ -52,6 +52,17 @@ public class VerticalSeekBar extends SeekBar {
     }
 
     @Override
+    protected void drawableStateChanged() {
+        super.drawableStateChanged();
+        if (mThumb != null && mThumb.isStateful()) {
+            int[] state = getDrawableState();
+            mThumb.setState(state);
+        }
+        invalidate();
+    }
+
+
+    @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(heightMeasureSpec, widthMeasureSpec);
         setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
