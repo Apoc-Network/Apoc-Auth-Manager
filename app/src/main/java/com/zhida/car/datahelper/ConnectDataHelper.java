@@ -1,32 +1,21 @@
 package com.zhida.car.datahelper;
 
-import android.util.Log;
-
-import com.zhida.car.datahelper.network.SocketHelper;
-
-import java.net.UnknownHostException;
+import com.zhida.car.datahelper.network.Message;
+import com.zhida.car.datahelper.network.MessageManager;
 
 /**
  * Created by skylan on 16/12/25.
  */
 
-public class ConnectDataHelper implements SocketHelper.ScocketResponseListener {
+public class ConnectDataHelper extends BaseDataHelper {
 
     public static final String COMMAND_STR = "cmd=ping";
-    public static final String MASK_IP = "255.255.255.255";
-    public static final int CONNECT_PORT = 8089;
 
-    private SocketHelper mSocketHelper;
     private boolean mHasConnected = false;
+    private Message mMsg;
 
     public ConnectDataHelper() {
-        mSocketHelper = new SocketHelper(1000);
-        mSocketHelper.setResponseListener(this);
-        try {
-            mSocketHelper.setSendData(COMMAND_STR, MASK_IP, CONNECT_PORT);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        mMsg = MessageManager.getInstance().getDefaultMessage(ConnectDataHelper.this);
     }
 
     public void connectCar() {
@@ -36,21 +25,19 @@ public class ConnectDataHelper implements SocketHelper.ScocketResponseListener {
             public void run() {
                 super.run();
                 for (int i = 0; i < 6 && !mHasConnected; i++) {
-                    mSocketHelper.send();
+                    mMsg.send(COMMAND_STR);
                 }
             }
         }.start();
     }
 
     @Override
-    public void receiveSucceed(String data) {
-        Log.e("SkyTest", "Connect Car Result:" + data);
-        mHasConnected = true;
+    public void onMessageReceivrFailed(String data) {
+        super.onMessageReceivrFailed(data);
     }
 
     @Override
-    public void receiveError() {
-        Log.e("SkyTest", "Connect Car ERROR!!!");
+    public void onMessageReceivrSucceed(String data) {
+        super.onMessageReceivrSucceed(data);
     }
-
 }

@@ -12,7 +12,7 @@ public class Wheel extends BasePart{
 
     public static final int STOP = Motor.STATE_STOP;
     public static final int FORWARD = Motor.STATE_CLOCKWISE;
-    public static final int BACKWARD = Motor.STATE_CONTERCLOCKWISE;
+    public static final int BACKWARD = Motor.STATE_CONTER_CLOCKWISE;
 
     public Wheel() {
         setDefaultAction(STOP);

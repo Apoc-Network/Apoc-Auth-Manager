@@ -1,7 +1,8 @@
 package com.zhida.car.datahelper.network;
 
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.zhida.car.utils.LogUtils;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -15,26 +16,29 @@ import java.net.UnknownHostException;
 
 public class SocketHelper {
 
-    public SocketHelper(int _timeOut) {
-        try {
-            mSocket = new MulticastSocket();
-            mSocket.setSoTimeout(_timeOut);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private static final String TAG = SocketHelper.class.getSimpleName();
+
+    private static final int TIME_OUT = 200;
+    private static final int DATA_LEN = 1024;
 
     public interface ScocketResponseListener {
         void receiveSucceed(String data);
-
-        void receiveError();
+        void receiveError(String errorMsg);
     }
-
-    private static final int DATA_LEN = 1024;
 
     public ScocketResponseListener mResponseListener = null;
 
     private MulticastSocket mSocket;
+
+    public SocketHelper(ScocketResponseListener responseListener) {
+        this.mResponseListener = responseListener;
+        try {
+            mSocket = new MulticastSocket();
+            mSocket.setSoTimeout(TIME_OUT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private byte[] mInBuff = new byte[DATA_LEN];
     private byte[] mOutBuff;
@@ -44,21 +48,22 @@ public class SocketHelper {
     private DatagramPacket mOutPacket = null;
 
     private InetAddress mAddress;
+    private int mPort;
 
-    public void setSendData(String commandStr, String address, int port) throws UnknownHostException {
-        mOutBuff = commandStr.getBytes();
-        this.mAddress = InetAddress.getByName(address);
-        this.mOutPacket = new DatagramPacket(mOutBuff, mOutBuff.length, mAddress, port);
+    public void setHostInfo(String address, int port) throws UnknownHostException {
+        mAddress = InetAddress.getByName(address);
+        mPort = port;
     }
 
-    public void setResponseListener(ScocketResponseListener responseListener) {
-        this.mResponseListener = responseListener;
+    public void setSendData(String commandStr) {
+        mOutBuff = commandStr.getBytes();
+        mOutPacket = new DatagramPacket(mOutBuff, mOutBuff.length, mAddress, mPort);
     }
 
     public void send() {
         if (mOutPacket != null && mSocket != null) {
             try {
-                Log.e("SkyTest", "Command :" + new String(mOutPacket.getData(), 0, mOutPacket.getLength()));
+                LogUtils.e(TAG, "Command :" + new String(mOutPacket.getData(), 0, mOutPacket.getLength()));
                 mSocket.send(mOutPacket);
                 mSocket.receive(mInPacket);
                 int dataLegth = mInPacket.getLength();
@@ -70,14 +75,13 @@ public class SocketHelper {
                         mResponseListener.receiveSucceed("");
                     }
                 } else {
-                    mResponseListener.receiveError();
+                    mResponseListener.receiveError("Data size less than 0!");
                 }
             } catch (IOException e) {
-                mResponseListener.receiveError();
+                mResponseListener.receiveError(e.getMessage());
             }
         } else {
-            Log.e("SkyTest", "Please init packet and socket");
-            mResponseListener.receiveError();
+            mResponseListener.receiveError("Please init packet and socket");
         }
     }
 

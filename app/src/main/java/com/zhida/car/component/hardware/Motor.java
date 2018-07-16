@@ -7,7 +7,7 @@ package com.zhida.car.component.hardware;
 public class Motor {
     public static final int STATE_STOP = 0;
     public static final int STATE_CLOCKWISE = 1;
-    public static final int STATE_CONTERCLOCKWISE = 2;
+    public static final int STATE_CONTER_CLOCKWISE = 2;
 
     private int mState;
     private int mSpeed;
