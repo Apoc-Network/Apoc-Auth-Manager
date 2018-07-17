@@ -17,6 +17,8 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
     private SocketHelper mSocketHelper;
     Timer mTimer;
 
+    int repeat_command = -1;
+
     public MoveDataHelper() {
         mSocketHelper = new SocketHelper(200);
         mSocketHelper.setResponseListener(this);
@@ -43,10 +45,17 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
 
 
     public void move(Direction leftWheel, Direction rightWheel) {
-        int command = (rightWheel.getValue() << 2) & leftWheel.getValue();
+        int command = (leftWheel.getValue() << 2) ^ rightWheel.getValue();
+        if (command == repeat_command) {
+            return;
+        }
+        repeat_command = command;
+
         try {
-            stop();
-            mSocketHelper.setSendData(COMMAND_SUB_STR + command, CAR_IP, CONNECT_PORT_LEFT);
+            cancelTask();
+            // change 10 to 'a'
+            mSocketHelper.setSendData(COMMAND_SUB_STR + (command == 10?"a":String.valueOf(command)),
+                    CAR_IP, CONNECT_PORT_LEFT);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -56,12 +65,16 @@ public class MoveDataHelper implements SocketHelper.ScocketResponseListener {
             public void run() {
                 mSocketHelper.send();
             }
-        }, 500, 500);
+        }, 0, 500);
     }
 
-    public void stop() {
+    private void cancelTask() {
         if (mTimer != null) {
             mTimer.cancel();
         }
+    }
+
+    public void stop() {
+        cancelTask();
     }
 }
