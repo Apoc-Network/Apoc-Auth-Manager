@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 
-import com.triggertrap.seekarc.SeekArc;
+import com.marcinmoskala.arcseekbar.ArcSeekBar;
+import com.marcinmoskala.arcseekbar.ProgressListener;
 import com.zhida.car.R;
 import com.zhida.car.component.Motor;
 import com.zhida.car.datahelper.MoveDataHelper;
@@ -18,8 +19,8 @@ public class RockerControllerActivity extends Activity {
 
     private VerticalSeekBar mLeftMotorRocker;
     private VerticalSeekBar mRightMotorRocker;
-    private SeekArc mLeftServoRocker;
-    private SeekArc mRightServoRocker;
+    private ArcSeekBar mLeftServoRocker;
+    private ArcSeekBar mRightServoRocker;
 
     private MoveDataHelper dataHelper;
 
@@ -41,8 +42,8 @@ public class RockerControllerActivity extends Activity {
     private void findView() {
         mLeftMotorRocker = (VerticalSeekBar) findViewById(R.id.rocker_left);
         mRightMotorRocker = (VerticalSeekBar) findViewById(R.id.rocker_right);
-        mLeftServoRocker = (SeekArc) findViewById(R.id.seekArc_left);
-        mRightServoRocker = (SeekArc) findViewById(R.id.seekArc_right);
+        mLeftServoRocker = (ArcSeekBar) findViewById(R.id.seekArc_left);
+        mRightServoRocker = (ArcSeekBar) findViewById(R.id.seekArc_right);
 
         mLeftMotorRocker.setTouchArea(findViewById(R.id.left_touch_area));
         mLeftMotorRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -84,37 +85,17 @@ public class RockerControllerActivity extends Activity {
             }
         });
 
-        mLeftServoRocker.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+        mLeftServoRocker.setOnStopTrackingTouch(new ProgressListener() {
             @Override
-            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekArc seekArc) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekArc seekArc) {
-                seekArc.setProgress(50);
+            public void invoke(int progress) {
+                mLeftServoRocker.setProgress(50);
             }
         });
 
-        mRightServoRocker.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+        mRightServoRocker.setOnStopTrackingTouch(new ProgressListener() {
             @Override
-            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekArc seekArc) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekArc seekArc) {
-                seekArc.setProgress(50);
+            public void invoke(int progress) {
+                mRightServoRocker.setProgress(50);
             }
         });
     }
